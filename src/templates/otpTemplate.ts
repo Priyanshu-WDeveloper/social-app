@@ -1,4 +1,4 @@
-const otpTemplate = (name: string, otp: string) => {
+const otpTemplate = (fullName: string, otp: string) => {
   return `
     <!DOCTYPE html>
     <html>
@@ -74,7 +74,7 @@ const otpTemplate = (name: string, otp: string) => {
           </div>
 
           <p class="text">
-            Hello ${name},
+            Hello ${fullName},
           </p>
 
           <p class="text">

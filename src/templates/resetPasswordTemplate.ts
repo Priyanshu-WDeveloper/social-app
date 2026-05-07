@@ -1,9 +1,12 @@
-const resetPasswordTemplate = (resetUrl: string, name?: string) => {
+const resetPasswordTemplate = (
+  resetUrl: string,
+  fullName?: string,
+) => {
   return `
     <div style="font-family: Arial, sans-serif; padding: 20px;">
       <h2>Password Reset Request</h2>
 
-      <p>Hello ${name || 'User'},</p>
+      <p>Hello ${fullName || 'User'},</p>
 
       <p>
         You requested a password reset.

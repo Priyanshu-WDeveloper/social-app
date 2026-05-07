@@ -2,16 +2,17 @@ import express from 'express';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 
-import authRoutes from './routes/auth.routes';
+import authRoutes from './routes/auth.routes.ts ';
 import postRoutes from './routes/post.routes';
 import userRoutes from './routes/user.routes';
 import { errorHandler } from './middleware/error.middleware';
+import { ENV } from './config/env';
 
 const app = express();
 
 app.use(
   cors({
-    origin: true,
+    origin: ENV.CLIENT_URL,
     credentials: true,
   }),
 );

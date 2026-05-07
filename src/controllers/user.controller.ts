@@ -37,7 +37,7 @@ export const getUser = async (req: Request, res: Response) => {
     .sort({
       createdAt: -1,
     })
-    .populate('user', 'name username email');
+    .populate('user', 'fullName username email');
 
   res.status(200).json({
     success: true,

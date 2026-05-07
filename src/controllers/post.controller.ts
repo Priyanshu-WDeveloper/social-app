@@ -30,7 +30,7 @@ export const createPost = async (req: Request, res: Response) => {
 
   const populatedPost = await Post.findById(post._id).populate(
     'user',
-    'name username email',
+    'fullName username email',
   );
 
   res.status(201).json({
@@ -44,7 +44,7 @@ export const createPost = async (req: Request, res: Response) => {
 
 export const getPosts = async (_req: Request, res: Response) => {
   const posts = await Post.find()
-    .populate('user', 'name username email')
+    .populate('user', 'fullName username email')
     .sort({
       createdAt: -1,
     });

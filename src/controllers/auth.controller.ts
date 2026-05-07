@@ -13,7 +13,7 @@ import otpTemplate from '../templates/otpTemplate';
 
 export const register = async (req: Request, res: Response) => {
   try {
-    const { name, email, username, password } = req.body;
+    const { fullName, email, username, password } = req.body;
 
     const existingUser = await User.findOne({
       $or: [{ email }, { username }],
@@ -45,7 +45,7 @@ export const register = async (req: Request, res: Response) => {
     // const hashedOtp = await hashPassword(otp);
 
     const user = await User.create({
-      name,
+      fullName,
       email,
       username,
       password: hashedPassword,
@@ -67,7 +67,7 @@ export const register = async (req: Request, res: Response) => {
         from: ENV.EMAIL_USER,
         to: email,
         subject: 'Verify your account',
-        html: otpTemplate(name, otp),
+        html: otpTemplate(fullName, otp),
       });
     } catch (mailError) {
       console.error('OTP email failed:', mailError);
@@ -134,17 +134,19 @@ export const verifyOtp = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { identifier, password } = req.body;
 
-  console.log(email, password);
+  console.log(identifier, password);
 
-  if (!email || !password) {
+  if (!identifier || !password) {
     return res.status(400).json({
       message: 'Email and password are required',
     });
   }
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({
+    $or: [{ email: identifier }, { username: identifier }],
+  });
 
   if (!user) {
     return res.status(404).json({
@@ -216,7 +218,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
       from: ENV.EMAIL_USER,
       to: user.email,
       subject: 'Password Reset',
-      html: resetPasswordTemplate(resetUrl, user.name),
+      html: resetPasswordTemplate(resetUrl, user.fullName),
     });
   } catch (mailError) {
     console.error('Password reset email failed:', mailError);
