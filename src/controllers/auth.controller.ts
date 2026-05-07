@@ -232,9 +232,13 @@ export const forgotPassword = async (req: Request, res: Response) => {
 export const resetPassword = async (req: Request, res: Response) => {
   console.log('Token', req.params.token);
 
+  const token = Array.isArray(req.params.token)
+    ? req.params.token[0]
+    : req.params.token;
+
   const hashedToken = crypto
     .createHash('sha256')
-    .update(req.params.token)
+    .update(token)
     .digest('hex');
 
   console.log('HashedToken', hashedToken);
