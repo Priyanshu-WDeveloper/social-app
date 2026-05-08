@@ -31,8 +31,6 @@ export const protect = (
       });
     }
 
-    console.log('Token', token);
-
     const decoded = jwt.verify(
       token,
       process.env.JWT_SECRET as string,
@@ -43,6 +41,7 @@ export const protect = (
 
     next();
   } catch (error) {
+    console.error(error);
     return res.status(401).json({
       message: 'Invalid token',
     });

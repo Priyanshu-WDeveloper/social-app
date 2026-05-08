@@ -136,8 +136,6 @@ export const verifyOtp = async (req: Request, res: Response) => {
 export const login = async (req: Request, res: Response) => {
   const { identifier, password } = req.body;
 
-  console.log(identifier, password);
-
   if (!identifier || !password) {
     return res.status(400).json({
       message: 'Email and password are required',
