@@ -23,8 +23,8 @@ router.get('/', getPosts);
 
 router.post(
   '/upload',
-  upload.array('media', 10),
   protect,
+  upload.array('media', 10),
   createPost,
 );
 

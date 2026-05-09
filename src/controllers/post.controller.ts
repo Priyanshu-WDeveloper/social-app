@@ -132,7 +132,7 @@ export const createPost = async (req: Request, res: Response) => {
 
         fileId: file.filename,
 
-        url: `${ENV.CLIENT_URL}/uploads/${file.filename}`,
+        url: `${ENV.SERVER_URL}/uploads/${file.filename}`,
 
         thumbnailUrl: '',
 
