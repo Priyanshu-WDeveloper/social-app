@@ -1,5 +1,70 @@
 import mongoose from 'mongoose';
 
+// const mediaSchema = new mongoose.Schema(
+//   {
+//     id: {
+//       type: String,
+//       required: true,
+//     },
+
+//     fileId: {
+//       type: String,
+//       required: true,
+//     },
+
+//     url: {
+//       type: String,
+//       required: true,
+//       trim: true,
+//     },
+
+//     thumbnailUrl: {
+//       type: String,
+//       default: '',
+//     },
+
+//     type: {
+//       type: String,
+//       enum: ['image', 'video', 'gif'],
+//       required: true,
+//     },
+
+//     mimeType: {
+//       type: String,
+//       default: '',
+//     },
+
+//     width: {
+//       type: Number,
+//       default: null,
+//     },
+
+//     height: {
+//       type: Number,
+//       default: null,
+//     },
+
+//     size: {
+//       type: Number,
+//       default: 0,
+//     },
+
+//     duration: {
+//       type: Number,
+//       default: null,
+//     },
+
+//     provider: {
+//       type: String,
+//       enum: ['imagekit'],
+//       default: 'imagekit',
+//     },
+//   },
+//   {
+//     _id: false,
+//   },
+// );
+
 const mediaSchema = new mongoose.Schema(
   {
     id: {
@@ -7,20 +72,9 @@ const mediaSchema = new mongoose.Schema(
       required: true,
     },
 
-    fileId: {
-      type: String,
-      required: true,
-    },
-
     url: {
       type: String,
       required: true,
-      trim: true,
-    },
-
-    thumbnailUrl: {
-      type: String,
-      default: '',
     },
 
     type: {
@@ -31,40 +85,14 @@ const mediaSchema = new mongoose.Schema(
 
     mimeType: {
       type: String,
-      default: '',
-    },
-
-    width: {
-      type: Number,
-      default: null,
-    },
-
-    height: {
-      type: Number,
-      default: null,
     },
 
     size: {
       type: Number,
-      default: 0,
-    },
-
-    duration: {
-      type: Number,
-      default: null,
-    },
-
-    provider: {
-      type: String,
-      enum: ['imagekit'],
-      default: 'imagekit',
     },
   },
-  {
-    _id: false,
-  },
+  { _id: false },
 );
-
 const postSchema = new mongoose.Schema(
   {
     user: {
@@ -89,26 +117,26 @@ const postSchema = new mongoose.Schema(
       },
     },
 
-    visibility: {
-      type: String,
-      enum: ['public', 'friends', 'private'],
-      default: 'public',
-      index: true,
-    },
-    likesCount: {
-      type: Number,
-      default: 0,
-    },
+    // visibility: {
+    //   type: String,
+    //   enum: ['public', 'friends', 'private'],
+    //   default: 'public',
+    //   index: true,
+    // },
+    // likesCount: {
+    //   type: Number,
+    //   default: 0,
+    // },
 
-    commentsCount: {
-      type: Number,
-      default: 0,
-    },
+    // commentsCount: {
+    //   type: Number,
+    //   default: 0,
+    // },
 
-    sharesCount: {
-      type: Number,
-      default: 0,
-    },
+    // sharesCount: {
+    //   type: Number,
+    //   default: 0,
+    // },
   },
   {
     timestamps: true,

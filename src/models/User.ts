@@ -17,11 +17,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
+      sparse: true,
     },
+    firebaseUid: String,
+    profilePicture: String,
 
     password: {
       type: String,
-      required: true,
+      // required: true,
     },
     otp: String,
 

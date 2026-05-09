@@ -3,22 +3,31 @@ import {
   createPost,
   getImageKitAuth,
   getPosts,
+  uploadMedia,
 } from '../controllers/post.controller';
-import { protect } from '../middleware/auth.middleware';
 import multer from 'multer';
-import { uploadMedia } from '../controllers/post.controller';
+import { protect } from '../middleware/auth.middleware';
+import upload from '../config/multer';
 
 const router = express.Router();
-const upload = multer({ storage: multer.memoryStorage() });
+// const upload = multer({ storage: multer.memoryStorage() });
 
 router.get('/', getPosts);
 // router.get('/upload', protect, getImageKitAuth);
+// router.post(
+//   '/img-upload',
+//   protect,
+//   upload.single('file'),
+//   uploadMedia,
+// );
+
 router.post(
-  '/img-upload',
+  '/upload',
+  upload.array('media', 10),
   protect,
-  upload.single('file'),
-  uploadMedia,
+  createPost,
 );
-router.post('/upload', protect, createPost);
+
+// router.post('/upload', protect, createPost);
 
 export default router;

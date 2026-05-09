@@ -10,6 +10,59 @@ import {
 import { ENV } from '../config/env';
 import resetPasswordTemplate from '../templates/resetPasswordTemplate';
 import otpTemplate from '../templates/otpTemplate';
+import admin from '../config/firebase-admin';
+
+export const googleAuth = async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    const decoded = await admin.auth().verifyIdToken(token);
+
+    const { email, name, picture, uid } = decoded;
+
+    if (!email) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid Firebase token',
+      });
+    }
+
+    let user = await User.findOne({ email });
+
+    const username =
+      email.split('@')[0] + Math.floor(Math.random() * 1000);
+
+    if (!user) {
+      user = await User.create({
+        fullName: name,
+        email,
+        username,
+        profilePicture: picture,
+        firebaseUid: uid,
+      });
+    }
+
+    const jwtToken = generateToken(String(user._id));
+
+    res.cookie('token', jwtToken, {
+      httpOnly: true,
+      secure: false,
+      sameSite: 'lax',
+    });
+
+    return res.json({
+      success: true,
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(401).json({
+      success: false,
+      message: 'Invalid Firebase token',
+    });
+  }
+};
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -60,7 +113,6 @@ export const register = async (req: Request, res: Response) => {
         pass: ENV.EMAIL_PASS,
       },
     });
-    console.log(ENV.EMAIL_USER, email);
 
     try {
       await transporter.sendMail({
