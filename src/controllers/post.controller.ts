@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import Post from '../models/Post';
 import imagekit from '../config/imagekit';
+import { ENV } from '../config/env';
 
 declare global {
   namespace Express {
@@ -131,7 +132,7 @@ export const createPost = async (req: Request, res: Response) => {
 
         fileId: file.filename,
 
-        url: `http://localhost:5000/uploads/${file.filename}`,
+        url: `${ENV.CLIENT_URL}/uploads/${file.filename}`,
 
         thumbnailUrl: '',
 
