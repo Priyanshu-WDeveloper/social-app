@@ -12,33 +12,93 @@ import resetPasswordTemplate from '../templates/resetPasswordTemplate';
 import otpTemplate from '../templates/otpTemplate';
 import admin from '../config/firebase-admin';
 
-export const googleAuth = async (req, res) => {
+// export const googleAuth = async (req, res) => {
+//   try {
+//     const { token } = req.body;
+
+//     const decoded = await admin.auth().verifyIdToken(token);
+
+//     const { email, name, picture, uid } = decoded;
+
+//     if (!email) {
+//       return res.status(401).json({
+//         success: false,
+//         message: 'Invalid Firebase token',
+//       });
+//     }
+
+//     let user = await User.findOne({ email });
+
+//     const username =
+//       email.split('@')[0] + Math.floor(Math.random() * 1000);
+
+//     if (!user) {
+//       user = await User.create({
+//         fullName: name,
+//         email,
+//         username,
+//         profilePicture: picture,
+//         firebaseUid: uid,
+//       });
+//     }
+
+//     const jwtToken = generateToken(String(user._id));
+
+//     res.cookie('token', jwtToken, {
+//       httpOnly: true,
+//       secure: false,
+//       sameSite: 'lax',
+//     });
+
+//     return res.json({
+//       success: true,
+//       user,
+//     });
+//   } catch (error) {
+//     console.error(error);
+
+//     return res.status(401).json({
+//       success: false,
+//       message: 'Invalid Firebase token',
+//     });
+//   }
+// };
+
+export const OAuth = async (req, res) => {
   try {
     const { token } = req.body;
 
-    const decoded = await admin.auth().verifyIdToken(token);
-
-    const { email, name, picture, uid } = decoded;
-
-    if (!email) {
-      return res.status(401).json({
+    if (!token) {
+      return res.status(400).json({
         success: false,
-        message: 'Invalid Firebase token',
+        message: 'Token is required',
       });
     }
 
+    const decoded = await admin.auth().verifyIdToken(token);
+
+    const email = decoded.email || `${decoded.uid}@firebase.local`;
+
+    const name = decoded.name || 'Firebase User';
+
+    const picture = decoded.picture || '';
+
     let user = await User.findOne({ email });
 
-    const username =
-      email.split('@')[0] + Math.floor(Math.random() * 1000);
-
     if (!user) {
+      const baseUsername = email
+        .split('@')[0]
+        .replace(/[^a-zA-Z0-9_]/g, '');
+
+      const username =
+        baseUsername + Math.floor(Math.random() * 10000);
+
       user = await User.create({
         fullName: name,
         email,
         username,
         profilePicture: picture,
-        firebaseUid: uid,
+        firebaseUid: decoded.uid,
       });
     }
 
@@ -46,11 +106,12 @@ export const googleAuth = async (req, res) => {
 
     res.cookie('token', jwtToken, {
       httpOnly: true,
-      secure: false,
+      secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    return res.json({
+    return res.status(200).json({
       success: true,
       user,
     });
@@ -63,7 +124,6 @@ export const googleAuth = async (req, res) => {
     });
   }
 };
-
 export const register = async (req: Request, res: Response) => {
   try {
     const { fullName, email, username, password } = req.body;

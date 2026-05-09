@@ -4,6 +4,7 @@ import {
   googleAuth,
   login,
   logout,
+  OAuth,
   register,
   resetPassword,
   verifyOtp,
@@ -13,7 +14,7 @@ import { loginSchema, registerSchema } from '../schemas/auth.schema';
 
 const router = express.Router();
 
-router.post('/google', googleAuth);
+router.post('/oauth', OAuth);
 
 router.post('/register', register);
 router.post('/verify-otp', verifyOtp);
